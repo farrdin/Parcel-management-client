@@ -16,7 +16,7 @@ const Navbar = () => {
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <div className="flex items-center justify-between shadow-lg fixed top-0 z-10 w-full bg-white dark:bg-gray-800">
+    <div className="flex items-center justify-between shadow-lg fixed top-0 z-10 w-full bg-backL dark:bg-backD font-open">
       {/* // ?Logo & Name section */}
       <div className="flex items-center">
         <button
@@ -33,14 +33,15 @@ const Navbar = () => {
         </button>
         <Link to="/" className="flex items-center">
           <img src={logo} alt="Logo" className="h-16" />
-          <span className="text-xl font-medium text-gray-800 dark:text-white">
-            ParcelPro
+          <span className="text-2xl font-medium text-headL dark:text-headD">
+            Parcel
+            <span className="text-base text-butL">Pro</span>
           </span>
         </Link>
       </div>
       {/* // ?center section */}
       <div className="hidden lg:flex lg:items-center lg:justify-center flex-grow">
-        <ul className="flex space-x-4 text-sm text-gray-800 dark:text-gray-300">
+        <ul className="flex space-x-4 text-sm text-headL dark:text-headD">
           <li className="py-2">
             <NavLink
               to="/"
@@ -70,12 +71,12 @@ const Navbar = () => {
         ) : (
           <div className="hidden md:flex space-x-4">
             <NavLink to="/login">
-              <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+              <button className="bg-butL dark:bg-butD hover:bg-butD hover:dark:bg-butL text-paraD dark:text-headL hover:dark:text-paraD hover:text-headL px-4 py-2 rounded-md font-semibold font-open">
                 Login
               </button>
             </NavLink>
             <NavLink to="/register">
-              <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+              <button className="bg-butL dark:bg-butD hover:bg-butD hover:dark:bg-butL text-paraD dark:text-headL hover:dark:text-paraD hover:text-headL px-4 py-2 rounded-md font-semibold font-open">
                 Register
               </button>
             </NavLink>
@@ -85,15 +86,15 @@ const Navbar = () => {
       </div>
       {/* // ?Hamburger section */}
       {menuOpen && (
-        <div className="lg:hidden absolute top-[100%] left-0 w-[150px] bg-white dark:bg-gray-500 shadow-lg z-50 rounded-md">
-          <ul className="py-4 px-2 text-gray-700 dark:text-gray-300">
+        <div className="lg:hidden absolute top-[100%] left-0 w-[150px] bg-backL dark:bg-backL shadow-lg z-50 rounded-md ">
+          <ul className="py-4 px-2 text-headL dark:text-headD">
             <li>
               <NavLink
                 to="/"
                 className={({ isActive }) => [
                   isActive
                     ? "bg-butD dark:bg-butL block  py-1 pl-2 rounded-sm"
-                    : "",
+                    : " hover:bg-butD hover:dark:bg-butL text-paraD dark:text-headL hover:dark:text-paraD hover:text-headL  block rounded-sm pl-2 py-1",
                 ]}
                 onClick={closeMenu}
               >
@@ -106,7 +107,7 @@ const Navbar = () => {
                 className={({ isActive }) => [
                   isActive
                     ? "bg-butD dark:bg-butL block py-1 pl-2 rounded-sm"
-                    : "",
+                    : " hover:bg-butD hover:dark:bg-butL text-paraD dark:text-headL hover:dark:text-paraD hover:text-headL block rounded-sm pl-2 py-1",
                 ]}
                 onClick={closeMenu}
               >
@@ -121,7 +122,7 @@ const Navbar = () => {
                     className={({ isActive }) => [
                       isActive
                         ? "bg-butD dark:bg-butL block py-1 pl-2 rounded-sm"
-                        : "",
+                        : "hover:bg-butD hover:dark:bg-butL text-paraD dark:text-headL hover:dark:text-paraD hover:text-headL block rounded-sm pl-2 py-1",
                     ]}
                     onClick={closeMenu}
                   >
@@ -134,7 +135,7 @@ const Navbar = () => {
                     className={({ isActive }) => [
                       isActive
                         ? "bg-butD dark:bg-butL block py-1 pl-2 rounded-sm"
-                        : "",
+                        : "hover:bg-butD hover:dark:bg-butL text-paraD dark:text-headL hover:dark:text-paraD hover:text-headL block rounded-sm pl-2 py-1",
                     ]}
                     onClick={closeMenu}
                   >

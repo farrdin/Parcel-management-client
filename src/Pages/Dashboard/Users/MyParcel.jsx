@@ -1,3 +1,4 @@
+import { TableDemo } from "@/components/User/TableDemo";
 import { Helmet } from "react-helmet-async";
 
 const MyParcel = () => {
@@ -6,7 +7,7 @@ const MyParcel = () => {
       <Helmet>
         <title>ParcelPro | My-Parcels</title>
       </Helmet>
-      <h1>This is my parcel page</h1>
+      <TableDemo />
     </div>
   );
 };

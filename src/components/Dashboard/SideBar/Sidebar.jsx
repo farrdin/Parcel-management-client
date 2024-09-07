@@ -1,21 +1,43 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Navigate, NavLink } from "react-router-dom";
 import { Link } from "react-router-dom";
 import useAuth from "@/Hooks/useAuth";
 import { GrLogout } from "react-icons/gr";
-import { FcSettings } from "react-icons/fc";
+import { CgProfile } from "react-icons/cg";
 import Hamburger from "hamburger-react";
-import logo from "../../assets/logo.png";
+import logo from "../../../assets/logo.png";
 import useRole from "@/Hooks/useRole";
 import DeliveryManNav from "./DeliveryManNav";
 import AdminNav from "./AdminNav";
 import UserNav from "./UserNav";
-import MainNav from "./MainNav";
+import Swal from "sweetalert2";
 
 const Sidebar = () => {
   const { logOut } = useAuth();
   const [isActive, setActive] = useState(true);
   const [role] = useRole();
+
+  const handleLogOut = () => {
+    Swal.fire({
+      title: "Want to Log Out?",
+      text: "You will be logged out!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#03560F",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes !",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logOut()
+          .then(() => {
+            Navigate("/");
+          })
+          .catch((error) => {
+            console.error("Error logging out:", error);
+          });
+      }
+    });
+  };
 
   const handleToggle = () => {
     setActive(!isActive);
@@ -56,7 +78,6 @@ const Sidebar = () => {
           </div>
           <div className="flex flex-col justify-between flex-1 mt-6">
             <nav>
-              <MainNav />
               {role === "user" && <UserNav />}
               {role === "deliveryMan" && <DeliveryManNav />}
               {role === "admin" && <AdminNav />}
@@ -74,12 +95,12 @@ const Sidebar = () => {
               }`
             }
           >
-            <FcSettings className="w-5 h-5" />
+            <CgProfile className="w-5 h-5" />
 
             <span className="mx-4">Profile</span>
           </NavLink>
           <button
-            onClick={logOut}
+            onClick={handleLogOut}
             className="flex w-full items-center px-4 py-2 mt-5 hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform"
           >
             <GrLogout className="w-5 h-5" />

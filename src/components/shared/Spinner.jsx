@@ -9,7 +9,7 @@ const Spinner = ({ smallHeight }) => {
       items-center
       mx-auto `}
     >
-      <SyncLoader size={10} color="red" />
+      <SyncLoader size={10} color="#FFB8B8" speedMultiplier="0.8" />
     </div>
   );
 };

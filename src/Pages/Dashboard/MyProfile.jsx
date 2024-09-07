@@ -6,7 +6,6 @@ const MyProfile = () => {
       <Helmet>
         <title>ParcelPro | Profile</title>
       </Helmet>
-      <h1>This is my Profile page</h1>
     </div>
   );
 };

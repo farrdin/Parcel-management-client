@@ -96,10 +96,10 @@ const LogIn = () => {
       <Helmet>
         <title>ParcelPro | Log In</title>
       </Helmet>
-      <div className="md:flex justify-around p-5">
+      <div className="md:flex md:gap-20 lg:gap-0 justify-end lg:justify-around p-5">
         <Lottie animationData={login} className="w-full md:w-[40%]" />
-        <div className="w-full md:w-[40%]">
-          <div className="p-4 rounded-md shadow bg-backL dark:bg-backD text-headL dark:text-paraD font-mont h-full w-[80%]">
+        <div className="w-full md:w-[60%] lg:w-[40%]">
+          <div className="p-4 rounded-md shadow bg-backL dark:bg-backD text-headL dark:text-paraD font-mont h-full lg:w-[80%]">
             <p className="text-sm text-center">
               Dont have account?
               <Link to="/register" className="hover:underline text-link ">

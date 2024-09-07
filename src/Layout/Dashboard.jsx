@@ -1,4 +1,4 @@
-import Sidebar from "@/components/Dashboard/Sidebar";
+import Sidebar from "@/components/Dashboard/SideBar/Sidebar";
 import { Helmet } from "react-helmet-async";
 import { Outlet } from "react-router-dom";
 

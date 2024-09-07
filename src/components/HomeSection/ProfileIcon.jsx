@@ -6,17 +6,30 @@ import {
 } from "@/components/ui/dropdown-menu";
 import useAuth from "@/Hooks/useAuth";
 import { Navigate, NavLink } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export function ProfileIcon() {
   const { user, logOut } = useAuth();
   const handleLogOut = () => {
-    logOut()
-      .then(() => {
-        Navigate("/");
-      })
-      .catch((error) => {
-        console.error("Error logging out:", error);
-      });
+    Swal.fire({
+      title: "Want to Log Out?",
+      text: "You will be logged out!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#03560F",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes !",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logOut()
+          .then(() => {
+            Navigate("/");
+          })
+          .catch((error) => {
+            console.error("Error logging out:", error);
+          });
+      }
+    });
   };
 
   return (

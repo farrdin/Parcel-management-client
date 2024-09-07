@@ -12,7 +12,7 @@ import useAxiosCommon from "@/Hooks/useAxiosCommon";
 
 const Register = () => {
   const navigate = useNavigate();
-  const { createUser, user } = useAuth();
+  const { createUser, user, updateUser } = useAuth();
   const {
     register,
     handleSubmit,
@@ -58,6 +58,7 @@ const Register = () => {
           } catch (axiosError) {
             console.error("Axios error:", axiosError);
           }
+          updateUser(data.name, imgGet.data.data.display_url);
         }
       })
       .catch((error) => {
@@ -76,10 +77,14 @@ const Register = () => {
         <title>ParcelPro | Register Now</title>
       </Helmet>
 
-      <div className="md:flex justify-around p-5">
-        <Lottie className="w-full md:w-[40%]" loop={true} animationData={reg} />
+      <div className="md:flex md:gap-20 lg:gap-0 justify-end lg:justify-around p-5">
+        <Lottie
+          className="w-full md:w-[50%] lg:w-[40%]"
+          loop={true}
+          animationData={reg}
+        />
 
-        <div className="w-full md:w-[40%]">
+        <div className="w-full md:w-[50%] lg:w-[40%]">
           <div className="h-full p-4 rounded-md shadow sm:p-8 bg-backL dark:bg-backD text-headL dark:text-paraD font-mont ">
             <p className="text-sm text-center text-headL dark:text-headD mb-10">
               Already have account?
@@ -148,7 +153,7 @@ const Register = () => {
                     </span>
                   )}
                 </div>
-                <div className="flex items-center gap-10 my-2">
+                <div className="lg:flex items-center gap-10 my-2 space-y-4 lg:space-y-0">
                   <div>
                     <label className="block text-sm text-headL dark:text-headD">
                       Choose Account:

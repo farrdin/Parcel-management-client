@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Main from "../Layout/Main";
 import ErrorPage from "@/Pages/ErrorPage";
 import Home from "@/Pages/Home/Home";
@@ -14,9 +14,25 @@ import MyDeliveryList from "@/Pages/Dashboard/DeliveryMan/MyDeliveryList";
 import MyReviews from "@/Pages/Dashboard/DeliveryMan/MyReviews";
 import BookParcel from "@/Pages/Dashboard/Users/BookParcel";
 import MyParcel from "@/Pages/Dashboard/Users/MyParcel";
-import MyProfile from "@/Pages/Dashboard/Users/MyProfile";
+import MyProfile from "@/Pages/Dashboard/MyProfile";
 import Login from "@/Pages/Client/Login";
 import Register from "@/Pages/Client/Register";
+import useRole from "@/Hooks/useRole";
+import Spinner from "@/components/shared/Spinner";
+
+const DashboardHome = () => {
+  const [role] = useRole();
+  if (!role) {
+    return <Spinner />;
+  }
+  if (role === "admin") {
+    return <Navigate to="/dashboard/statistics" />;
+  } else if (role === "deliveryMan") {
+    return <Navigate to="/dashboard/deliveryList" />;
+  } else if (role === "user") {
+    return <Navigate to="/dashboard/my-parcel" />;
+  }
+};
 
 const router = createBrowserRouter([
   // ** Home Routing
@@ -50,10 +66,20 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/dashboard",
+        index: true,
         element: (
           <PrivateRoute>
-            <Statistics />
+            <DashboardHome />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "statistics",
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <Statistics />
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
