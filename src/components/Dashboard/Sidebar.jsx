@@ -22,7 +22,7 @@ const Sidebar = () => {
   };
   return (
     <>
-      {/* Small Screen Navbar */}
+      {/* //*?Small Screen Navbar */}
       <div className="bg-backL dark:bg-backD flex items-center justify-between md:hidden">
         <div>
           <Link to="/" className="flex items-center">
