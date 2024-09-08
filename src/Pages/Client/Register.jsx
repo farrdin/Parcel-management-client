@@ -35,6 +35,7 @@ const Register = () => {
       email: email,
       name: data.name,
       image: imgGet.data.data.display_url,
+      phone: data.phone,
       role: "user",
       requested: data.requested,
     };
@@ -150,6 +151,35 @@ const Register = () => {
                   {errors.password && (
                     <span className="text-sm text-link">
                       {errors.password.message}
+                    </span>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <label
+                    htmlFor="phone"
+                    className="text-sm ext-headL dark:text-headD"
+                  >
+                    Phone Number
+                  </label>
+                  <input
+                    {...register("phone", {
+                      required: "Phone Number is required",
+                      maxLength: {
+                        value: 11,
+                        message: "Enter a valid Number",
+                      },
+                      pattern: {
+                        value: /^[0-9]*$/,
+                        message: "Phone number must only contain digits",
+                      },
+                    })}
+                    type="text"
+                    placeholder="Enter a Phone Number"
+                    className="w-full px-3 py-2 border rounded-md dark:border-link dark:bg-gray-50 dark:text-headL focus:dark:border-link"
+                  />
+                  {errors.phone && (
+                    <span className="text-sm text-link">
+                      {errors.phone.message}
                     </span>
                   )}
                 </div>

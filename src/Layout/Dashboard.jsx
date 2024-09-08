@@ -1,6 +1,7 @@
 import Sidebar from "@/components/Dashboard/SideBar/Sidebar";
 import { Helmet } from "react-helmet-async";
 import { Outlet } from "react-router-dom";
+import bg from "../assets/bg.jpg";
 
 const Dashboard = () => {
   return (
@@ -10,7 +11,10 @@ const Dashboard = () => {
       </Helmet>
       <Sidebar></Sidebar>
       <div className="flex-1 md:ml-64">
-        <div className="p-5">
+        <div
+          className="p-5 bg-cover h-full"
+          style={{ backgroundImage: `url(${bg})` }}
+        >
           <Outlet />
         </div>
       </div>
