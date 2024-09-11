@@ -160,16 +160,12 @@ const Register = () => {
                   <input
                     {...register("phone", {
                       required: "Phone Number is required",
-                      maxLength: {
-                        value: 11,
-                        message: "Enter a valid Number",
-                      },
                       pattern: {
-                        value: /^[0-9]*$/,
+                        value: /^\+?[0-9]\d{10,10}$/,
                         message: "Phone number must only contain digits",
                       },
                     })}
-                    type="text"
+                    type="tel"
                     placeholder="Enter a Phone Number"
                     className="w-full px-3 py-2 border rounded-md dark:border-link dark:bg-gray-50 dark:text-headL focus:dark:border-link"
                   />

@@ -16,17 +16,42 @@ import mapicon from "../../../assets/map.json";
 
 const BookParcel = () => {
   const { user } = useAuth();
-  const { register, handleSubmit, setValue } = useForm({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       name: user.displayName,
       email: user.email,
       latitude: "",
       longitude: "",
+      weight: "",
+      price: 0,
     },
   });
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [showMapDialog, setShowMapDialog] = useState(false);
+
+  const today = new Date().toISOString().split("T")[0];
+  const calculatePrice = (weight) => {
+    if (!weight || weight <= 0) {
+      return 0;
+    } else if (weight <= 1) {
+      return 50;
+    } else if (weight === 2) {
+      return 100;
+    } else {
+      return 150;
+    }
+  };
+  const handleWeightChange = (event) => {
+    const weight = event.target.value;
+    setValue("weight", weight);
+    setValue("price", calculatePrice(Number(weight)));
+  };
   const handleLocationSelect = (lat, lng) => {
     setLatitude(lat);
     setLongitude(lng);
@@ -35,30 +60,19 @@ const BookParcel = () => {
     setShowMapDialog(false);
   };
   const onSubmit = async (data) => {
-    // const {
-    //   name,
-    //   email,
-    //   phone,
-    //   type,
-    //   weight,
-    //   address,
-    //   reciverName,
-    //   reciverNumber,
-    //   reqDate,
-    //   price,
-    // } = data;
-
     if (!latitude || !longitude) {
       toast.error("Please select a location on the map.");
       return;
     }
-    const locationData = {
+    const parcelData = {
       ...data,
       latitude,
       longitude,
+      bookingDate: today,
+      status: "Pending",
     };
 
-    console.log(locationData, data);
+    console.log(parcelData);
   };
 
   return (
@@ -106,12 +120,23 @@ const BookParcel = () => {
                       Your Number
                     </label>
                     <input
-                      {...register("phone")}
+                      {...register("phone", {
+                        required: "Phone Number is required",
+                        pattern: {
+                          value: /^\+?[0-9]\d{10,10}$/,
+                          message: "Phone number must only contain digits",
+                        },
+                      })}
                       required
-                      type="number"
+                      type="tel"
                       placeholder="+880****"
                       className="w-full px-3 py-2 border rounded-md dark:border-link dark:bg-gray-50 dark:text-headL focus:dark:border-link"
                     />
+                    {errors.phone && (
+                      <span className="text-sm text-link">
+                        {errors.phone.message}
+                      </span>
+                    )}
                   </div>
                   <div className="space-y-2 md:w-1/2">
                     <label className="block text-sm text-headL dark:text-headD">
@@ -133,9 +158,12 @@ const BookParcel = () => {
                     </label>
                     <input
                       {...register("weight")}
+                      onChange={handleWeightChange}
                       required
+                      maxLength="2"
+                      max="20"
                       type="number"
-                      placeholder="__kg"
+                      placeholder="**kg"
                       className="w-full px-3 py-2 border rounded-md dark:border-link dark:bg-gray-50 dark:text-headL focus:dark:border-link"
                     />
                   </div>
@@ -170,12 +198,23 @@ const BookParcel = () => {
                       Reciver Number
                     </label>
                     <input
-                      {...register("reciverNumber")}
+                      {...register("reciverNumber", {
+                        required: "Phone Number is required",
+                        pattern: {
+                          value: /^\+?[0-9]\d{10,10}$/,
+                          message: "Phone number must only contain digits",
+                        },
+                      })}
                       required
-                      type="number"
+                      type="tel"
                       placeholder="+880****"
                       className="w-full px-3 py-2 border rounded-md dark:border-link dark:bg-gray-50 dark:text-headL focus:dark:border-link"
                     />
+                    {errors.reciverNumber && (
+                      <span className="text-sm text-link">
+                        {errors.reciverNumber.message}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="md:flex items-center gap-10">
@@ -186,19 +225,19 @@ const BookParcel = () => {
                     <input
                       {...register("reqDate")}
                       required
+                      min={today}
                       type="date"
                       className="w-full px-3 py-1 border rounded-md dark:border-link dark:bg-gray-50 dark:text-headL focus:dark:border-link"
                     />
                   </div>
                   <div className="space-y-2 md:w-1/2">
                     <label className="block text-sm text-headL dark:text-headD">
-                      Price*
+                      Price (TK):
                     </label>
                     <input
                       {...register("price")}
-                      required
                       type="number"
-                      placeholder="Parcel Price"
+                      readOnly
                       className="w-full px-3 py-2 border rounded-md dark:border-link dark:bg-gray-50 dark:text-headL focus:dark:border-link"
                     />
                   </div>
@@ -216,7 +255,6 @@ const BookParcel = () => {
                       style={{ width: "100vw", maxWidth: "850px" }}
                     >
                       <DialogTitle>Select a location on the map</DialogTitle>
-
                       <MapLocation
                         latitude={latitude}
                         longitude={longitude}
@@ -228,7 +266,6 @@ const BookParcel = () => {
                   </Dialog>
                 </div>
               </div>
-
               <button className="bg-butL dark:bg-butD hover:bg-butD hover:dark:bg-butL text-paraD dark:text-headL hover:dark:text-paraD hover:text-headL w-full px-8 py-3 font-semibold rounded-md">
                 Book For Parcel
               </button>
