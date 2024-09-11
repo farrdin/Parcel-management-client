@@ -66,7 +66,7 @@ const BookParcel = () => {
   };
   const { mutateAsync } = useMutation({
     mutationFn: async (parcelData) => {
-      const { data } = await axiosSecure.post(`/book-parcel`, parcelData);
+      const { data } = await axiosSecure.post(`/parcels`, parcelData);
       return data;
     },
     onSuccess: () => {

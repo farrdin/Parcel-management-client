@@ -6,10 +6,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import data from "../../../public/data.json";
 import { Button } from "../ui/button";
 
-export function TableDemo() {
+export function TableDemo({ booked }) {
   return (
     <div className="overflow-x-auto">
       <Table>
@@ -17,7 +16,7 @@ export function TableDemo() {
           <TableRow>
             <TableHead>Parcel Types</TableHead>
             <TableHead>Requested Date</TableHead>
-            <TableHead>Approximatte Date</TableHead>
+            <TableHead>Approximate Date</TableHead>
             <TableHead>Booking Date</TableHead>
             <TableHead>Delivery Man id</TableHead>
             <TableHead>Status</TableHead>
@@ -26,14 +25,14 @@ export function TableDemo() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((data) => (
+          {booked.map((data) => (
             <TableRow key={data.id}>
-              <TableCell>{data.Parcel_Types}</TableCell>
-              <TableCell>{data.Requested_Date}</TableCell>
+              <TableCell>{data.type}</TableCell>
+              <TableCell>{data.reqDate}</TableCell>
               <TableCell>{data.Approximatte_Date}</TableCell>
-              <TableCell>{data.BOOKING_Date}</TableCell>
+              <TableCell>{data.bookingDate}</TableCell>
               <TableCell>{data.DeliveryMan_id}</TableCell>
-              <TableCell>{data.Status}</TableCell>
+              <TableCell>{data.status}</TableCell>
               <TableCell>Reviews</TableCell>
               <TableCell>
                 <Button>Actions</Button>
