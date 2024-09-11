@@ -16,7 +16,6 @@ import mapicon from "../../../assets/map.json";
 
 const BookParcel = () => {
   const { user } = useAuth();
-  console.log(user);
   const { register, handleSubmit, setValue } = useForm({
     defaultValues: {
       name: user.displayName,

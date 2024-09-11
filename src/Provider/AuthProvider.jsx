@@ -52,44 +52,86 @@ const AuthProvider = ({ children }) => {
   };
   const logOut = async () => {
     setLoading(true);
-    await axios.get("logout", {
-      withCredentials: true,
-    });
-    return signOut(auth);
+    try {
+      await axios.get("/logout", { withCredentials: true });
+      await signOut(auth);
+    } catch (error) {
+      console.error("Error during logout:", error);
+    } finally {
+      setLoading(false);
+    }
   };
   const getToken = async (email) => {
-    const { data } = await axios.post(
-      "jwt",
-      { email },
-      { withCredentials: true }
-    );
-    return data;
+    try {
+      const { data } = await axios.post(
+        "/jwt",
+        { email },
+        { withCredentials: true }
+      );
+      return data;
+    } catch (error) {
+      console.error("Error getting token:", error);
+    }
   };
   const addUser = async (user) => {
-    const currentUser = {
-      email: user?.email,
-      name: user.displayName,
-      image: user.photoURL,
+    const email = user?.email?.toLowerCase();
+    const loggedUser = {
+      email,
+      name: user?.displayName,
+      image: user?.photoURL,
+      phone: "",
       role: "user",
       requested: "user",
     };
-    const { data } = await axios.put("users", currentUser);
-    return data;
+
+    try {
+      if (email) {
+        try {
+          const { data: exist } = await axios.get(`/users/${email}`);
+          if (exist?.email) {
+            return exist;
+          }
+        } catch (error) {
+          if (error.response?.status === 404) {
+            const { data: newUser } = await axios.put("/users", loggedUser);
+            console.log("New user added:", newUser);
+            return newUser;
+          } else {
+            throw error;
+          }
+        }
+      } else {
+        throw new Error("Email is null or undefined");
+      }
+    } catch (error) {
+      console.error(
+        "Error adding or checking user:",
+        error.message || error.response?.data
+      );
+    }
   };
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
         getToken(currentUser.email);
-        addUser(currentUser);
+        const socialMediaProviders = [
+          "google.com",
+          "github.com",
+          "facebook.com",
+        ];
+        if (
+          socialMediaProviders.includes(
+            currentUser?.providerData[0]?.providerId
+          )
+        ) {
+          addUser(currentUser);
+        }
       }
       setLoading(false);
     });
-    return () => {
-      return unSubscribe();
-    };
+    return () => unSubscribe();
   });
-
   const authInfo = {
     auth,
     user,
@@ -103,7 +145,6 @@ const AuthProvider = ({ children }) => {
     logOut,
     resetPassword,
   };
-
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );

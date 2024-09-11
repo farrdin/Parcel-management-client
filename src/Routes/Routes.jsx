@@ -19,6 +19,7 @@ import Login from "@/Pages/Client/Login";
 import Register from "@/Pages/Client/Register";
 import useRole from "@/Hooks/useRole";
 import Spinner from "@/components/shared/Spinner";
+import UserRoute from "../Routes/UserRoute";
 
 const DashboardHome = () => {
   const [role] = useRole();
@@ -137,7 +138,9 @@ const router = createBrowserRouter([
         path: "book-parcel",
         element: (
           <PrivateRoute>
-            <BookParcel />
+            <UserRoute>
+              <BookParcel />
+            </UserRoute>
           </PrivateRoute>
         ),
       },
@@ -145,7 +148,9 @@ const router = createBrowserRouter([
         path: "my-parcel",
         element: (
           <PrivateRoute>
-            <MyParcel />
+            <UserRoute>
+              <MyParcel />
+            </UserRoute>
           </PrivateRoute>
         ),
       },

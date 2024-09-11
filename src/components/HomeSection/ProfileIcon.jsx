@@ -5,11 +5,13 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import useAuth from "@/Hooks/useAuth";
-import { Navigate, NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export function ProfileIcon() {
   const { user, logOut } = useAuth();
+  const navigate = useNavigate();
+
   const handleLogOut = () => {
     Swal.fire({
       title: "Want to Log Out?",
@@ -23,7 +25,7 @@ export function ProfileIcon() {
       if (result.isConfirmed) {
         logOut()
           .then(() => {
-            Navigate("/");
+            navigate("/");
           })
           .catch((error) => {
             console.error("Error logging out:", error);

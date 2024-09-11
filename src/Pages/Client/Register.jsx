@@ -9,10 +9,11 @@ import useAuth from "@/Hooks/useAuth";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useAxiosCommon from "@/Hooks/useAxiosCommon";
+import { imageUpload } from "@/components/shared/image";
 
 const Register = () => {
   const navigate = useNavigate();
-  const { createUser, user, updateUser } = useAuth();
+  const { createUser, user, updateUser, setLoading } = useAuth();
   const {
     register,
     handleSubmit,
@@ -21,51 +22,46 @@ const Register = () => {
   const axios = useAxiosCommon();
 
   const onSubmit = async (data) => {
-    // *? Upload image to imgbb and then get an url
-    const image_upload = `https://api.imgbb.com/1/upload?key=${
-      import.meta.env.VITE_IMAGE_KEY
-    }`;
     const imgFile = data.image[0];
-    const formData = new FormData();
-    formData.append("image", imgFile);
-    const imgGet = await axios.post(image_upload, formData);
-    const email = data.email;
+    const image = await imageUpload(imgFile);
+    const name = data.name;
+    const email = data.email.toLowerCase();
     const password = data.password;
-    const userDetail = {
-      email: email,
-      name: data.name,
-      image: imgGet.data.data.display_url,
-      phone: data.phone,
-      role: "user",
-      requested: data.requested,
-    };
-    createUser(email, password)
-      .then(async (result) => {
-        if (result.user) {
-          try {
-            const userRes = await axios.put("users", userDetail);
-            if (userRes.status === 200) {
-              Swal.fire({
-                title: "Congratulations!",
-                text: "Your Account Created Successfully!",
-                icon: "success",
-                timer: 2000,
-              });
+    const phone = data.phone;
+    const requested = data.requested;
 
-              setTimeout(() => {
-                navigate(location?.state ? location.state : "/");
-              }, 1500);
-            }
-          } catch (axiosError) {
-            console.error("Axios error:", axiosError);
-          }
-          updateUser(data.name, imgGet.data.data.display_url);
-        }
-      })
-      .catch((error) => {
-        toast.error(error.message, { theme: "colored" });
-      });
+    try {
+      const result = await createUser(email, password);
+      if (result.user) {
+        const userDetail = {
+          email,
+          name,
+          image,
+          phone,
+          requested,
+          role: "user",
+        };
+        await axios.put("/users", userDetail);
+        await updateUser(name, image);
+        Swal.fire({
+          title: "Congratulations!",
+          text: "Your Account Created Successfully!",
+          icon: "success",
+          timer: 2000,
+        });
+
+        setTimeout(() => {
+          navigate(location?.state ? location.state : "/");
+        }, 1000);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.message, { theme: "colored" });
+    } finally {
+      setLoading(false);
+    }
   };
+
   // **Logged in user can not enter on this page
   useEffect(() => {
     if (user) {
@@ -193,10 +189,10 @@ const Register = () => {
                       required
                       className="px-3 py-2 border rounded-md dark:border-link dark:bg-gray-50 dark:text-headL focus:dark:border-link"
                     >
-                      <option defaultValue="User" value="User">
+                      <option defaultValue="User" value="user">
                         User
                       </option>
-                      <option value="DeliveryMan">Delivery Man</option>
+                      <option value="deliveryMan">Delivery Man</option>
                     </select>
                   </div>
                   <div>
