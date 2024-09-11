@@ -13,9 +13,14 @@ import {
 import { Dialog } from "@radix-ui/react-dialog";
 import { toast } from "react-toastify";
 import mapicon from "../../../assets/map.json";
+import { useMutation } from "@tanstack/react-query";
+import useAxiosSecure from "@/Hooks/useAxiosSecure";
+import { useNavigate } from "react-router-dom";
 
 const BookParcel = () => {
-  const { user } = useAuth();
+  const { user, setLoading } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -50,7 +55,7 @@ const BookParcel = () => {
   const handleWeightChange = (event) => {
     const weight = event.target.value;
     setValue("weight", weight);
-    setValue("price", calculatePrice(Number(weight)));
+    setValue("price", String(calculatePrice(Number(weight))));
   };
   const handleLocationSelect = (lat, lng) => {
     setLatitude(lat);
@@ -59,20 +64,36 @@ const BookParcel = () => {
     setValue("longitude", lng);
     setShowMapDialog(false);
   };
+  const { mutateAsync } = useMutation({
+    mutationFn: async (parcelData) => {
+      const { data } = await axiosSecure.post(`/book-parcel`, parcelData);
+      return data;
+    },
+    onSuccess: () => {
+      toast.success("Parcel Booked Successfully!");
+      navigate("/dashboard/my-parcel");
+      setLoading(false);
+    },
+  });
   const onSubmit = async (data) => {
     if (!latitude || !longitude) {
       toast.error("Please select a location on the map.");
       return;
     }
-    const parcelData = {
-      ...data,
-      latitude,
-      longitude,
-      bookingDate: today,
-      status: "Pending",
-    };
-
-    console.log(parcelData);
+    try {
+      const parcelData = {
+        ...data,
+        latitude: String(latitude),
+        longitude: String(longitude),
+        bookingDate: today,
+        status: "Pending",
+      };
+      await mutateAsync(parcelData);
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message);
+      setLoading(false);
+    }
   };
 
   return (
