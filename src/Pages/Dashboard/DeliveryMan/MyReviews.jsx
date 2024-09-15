@@ -1,3 +1,4 @@
+import ReviewCards from "@/components/Dashboard/DeliveryMan/ReviewCards";
 import { Helmet } from "react-helmet-async";
 
 const MyReviews = () => {
@@ -6,7 +7,7 @@ const MyReviews = () => {
       <Helmet>
         <title>ParcelPro | Reviews</title>
       </Helmet>
-      <h1>thsi is my review page</h1>
+      <ReviewCards />
     </div>
   );
 };

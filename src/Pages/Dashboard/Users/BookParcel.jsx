@@ -181,6 +181,7 @@ const BookParcel = () => {
                       {...register("weight")}
                       onChange={handleWeightChange}
                       required
+                      min={1}
                       maxLength="2"
                       max="20"
                       type="number"

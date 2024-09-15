@@ -1,12 +1,31 @@
+import { TableDeliveryList } from "@/components/Dashboard/DeliveryMan/TableDeliveryList";
+import useAxiosSecure from "@/Hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
 
 const MyDeliveryList = () => {
+  const axiosSecure = useAxiosSecure();
+  const {
+    data: assigned = [],
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["/parcels-assigned"],
+    queryFn: async () => {
+      const { data } = await axiosSecure.get(`/parcels-assigned`);
+      return data;
+    },
+  });
   return (
     <div>
       <Helmet>
         <title>ParcelPro | Delivery-List</title>
       </Helmet>
-      <h1>This is My delivery list</h1>
+      <TableDeliveryList
+        assigned={assigned}
+        isLoading={isLoading}
+        refetch={refetch}
+      />
     </div>
   );
 };

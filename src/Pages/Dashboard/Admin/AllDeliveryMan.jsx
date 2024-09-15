@@ -1,3 +1,4 @@
+import { TableDeliveryMan } from "@/components/Dashboard/Admin/TableDeliveryMan";
 import { Helmet } from "react-helmet-async";
 
 const AllDeliveryMan = () => {
@@ -6,7 +7,7 @@ const AllDeliveryMan = () => {
       <Helmet>
         <title>ParcelPro | All-DeliveryMan</title>
       </Helmet>
-      <h1>This is All AllDeliveryMan page</h1>
+      <TableDeliveryMan />
     </div>
   );
 };

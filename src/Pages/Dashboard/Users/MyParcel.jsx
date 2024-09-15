@@ -1,4 +1,4 @@
-import { TableDemo } from "@/components/User/TableDemo";
+import { TableUser } from "@/components/Dashboard/User/TableUser";
 import useAuth from "@/Hooks/useAuth";
 import useAxiosSecure from "@/Hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
@@ -8,7 +8,7 @@ const MyParcel = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const {
-    data: booked = [],
+    data: parcels = [],
     isLoading,
     refetch,
   } = useQuery({
@@ -24,7 +24,7 @@ const MyParcel = () => {
       <Helmet>
         <title>ParcelPro | My-Parcels</title>
       </Helmet>
-      <TableDemo booked={booked} isLoading={isLoading} refetch={refetch} />
+      <TableUser parcels={parcels} isLoading={isLoading} refetch={refetch} />
     </div>
   );
 };
