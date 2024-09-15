@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 const Main = () => {
   return (
-    <div className="mt-[65px] min-h-svh flex flex-col">
+    <div className="mt-[64px] min-h-svh flex flex-col">
       <Helmet>
         <title>ParcelPro | Home</title>
       </Helmet>

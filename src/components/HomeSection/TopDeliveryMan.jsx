@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "@/Hooks/useAxiosSecure";
+import { FaStar } from "react-icons/fa";
 
 const TopDeliveryMan = () => {
   const axiosSecure = useAxiosSecure();
@@ -15,8 +16,14 @@ const TopDeliveryMan = () => {
     },
   });
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error loading data: {error.message}</p>;
+  if (isLoading) return <p className="text-center text-gray-500">Loading...</p>;
+  if (error)
+    return (
+      <p className="text-center text-red-500">
+        Error loading data: {error.message}
+      </p>
+    );
+
   const sortedDeliveryMen = (Array.isArray(topMan) ? topMan : [])
     .slice()
     .sort((a, b) => {
@@ -28,8 +35,8 @@ const TopDeliveryMan = () => {
     .slice(0, 3);
 
   return (
-    <section className="p-6 bg-white text-center">
-      <h1 className="text-4xl text-center text-headL dark:text-headD font-sans font-semibold mb-6">
+    <section className="p-6 bg-gradient-to-r from-purple-300 via-pink-300 to-red-300 dark:from-purple-700 dark:via-pink-700 dark:to-red-700">
+      <h1 className="text-4xl font-semibold text-center text-gray-900 dark:text-gray-100 mb-10">
         Top Delivery Men
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -37,24 +44,36 @@ const TopDeliveryMan = () => {
           sortedDeliveryMen.map((man) => (
             <div
               key={man._id}
-              className="delivery-man-card p-6 bg-gray-100 rounded-lg shadow-lg"
+              className="relative bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-2xl"
             >
-              <img
-                src={man.image}
-                alt={man.name}
-                className="w-24 h-24 rounded-full mx-auto mb-4"
-              />
-              <h3 className="text-xl font-semibold mb-2">{man.name}</h3>
-              <p className="text-lg mb-1">
-                Parcels Delivered: {man.deliveryCount}
-              </p>
-              <p className="text-lg">
-                Average Rating: {man.averageRating.toFixed(1)}
-              </p>
+              <div className="absolute inset-0 -z-10 bg-gradient-to-br from-indigo-500 to-blue-500 opacity-20 rounded-lg"></div>
+              <div className="flex items-center space-x-4 mb-4">
+                <img
+                  src={man.image}
+                  alt={man.name}
+                  className="w-20 h-20 object-cover rounded-full border-4 border-white dark:border-gray-700 shadow-lg"
+                />
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                    {man.name}
+                  </h2>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Total Deliveries: {man.deliveryCount}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <FaStar className="text-yellow-500" />
+                <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                  {man.averageRating.toFixed(1)}
+                </span>
+              </div>
             </div>
           ))
         ) : (
-          <p>No delivery men data available.</p>
+          <p className="text-center text-gray-600 dark:text-gray-400">
+            No delivery men data available.
+          </p>
         )}
       </div>
     </section>

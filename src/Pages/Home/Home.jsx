@@ -6,20 +6,20 @@ import { Helmet } from "react-helmet-async";
 
 function Home() {
   return (
-    <div className="space-y-20 my-10">
+    <div className="space-y-20 mb-10">
       <Helmet>
         <title>ParcelPro | Home</title>
       </Helmet>
       <div>
         <Banner />
       </div>
-      <div>
+      <div className="w-[85%] mx-auto">
         <Feature />
       </div>
       <div>
         <AppUserStat />
       </div>
-      <div>
+      <div className="w-[85%] mx-auto">
         <TopDeliveryMan />
       </div>
     </div>
