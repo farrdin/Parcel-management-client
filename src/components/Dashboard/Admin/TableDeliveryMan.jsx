@@ -1,4 +1,3 @@
-import {} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -12,14 +11,22 @@ import { useQuery } from "@tanstack/react-query";
 
 export function TableDeliveryMan() {
   const axiosSecure = useAxiosSecure();
-  // *?get Users  from DB
-  const { data: AllUsers = [] } = useQuery({
-    queryKey: ["/users"],
+  const {
+    data: deliveryMen = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["/delivery-men"],
     queryFn: async () => {
-      const { data } = await axiosSecure.get(`/users`);
+      const { data } = await axiosSecure.get(`/delivery-men`);
       return data;
     },
   });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
+
   return (
     <div className="overflow-x-auto">
       <Table>
@@ -32,18 +39,14 @@ export function TableDeliveryMan() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {AllUsers.filter((user) => user.role === "deliveryMan").map(
-            (users) => {
-              return (
-                <TableRow key={users._id}>
-                  <TableCell>{users.name}</TableCell>
-                  <TableCell>{users.phone}</TableCell>
-                  <TableCell>{users.deliveryCount}</TableCell>
-                  <TableCell>{users.reviews}</TableCell>
-                </TableRow>
-              );
-            }
-          )}
+          {deliveryMen.map((deliveryMan) => (
+            <TableRow key={deliveryMan._id}>
+              <TableCell>{deliveryMan.name}</TableCell>
+              <TableCell>{deliveryMan.phone}</TableCell>
+              <TableCell>{deliveryMan.deliveryCount}</TableCell>
+              <TableCell>{deliveryMan.averageRating}</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>

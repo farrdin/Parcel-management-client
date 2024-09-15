@@ -53,7 +53,6 @@ export function TableUser({ parcels, isLoading, refetch }) {
   };
   const closeReview = () => {
     setreviewOpen(false);
-    setReview(null);
   };
   const openPayment = (payment) => {
     setpaymentOpen(true);
@@ -154,7 +153,9 @@ export function TableUser({ parcels, isLoading, refetch }) {
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => openReview(data)}
-                      disabled={data.status !== "Delivered"}
+                      disabled={
+                        data.status !== "Delivered" || data.review === "Reviewd"
+                      }
                     >
                       Review
                     </DropdownMenuItem>
