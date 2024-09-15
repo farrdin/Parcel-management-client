@@ -1,4 +1,5 @@
 import AppUserStat from "@/components/HomeSection/AppUserStat";
+import Banner from "@/components/HomeSection/Banner";
 import Feature from "@/components/HomeSection/Feature";
 import TopDeliveryMan from "@/components/HomeSection/TopDeliveryMan";
 import { Helmet } from "react-helmet-async";
@@ -10,13 +11,16 @@ function Home() {
         <title>ParcelPro | Home</title>
       </Helmet>
       <div>
-        <Feature></Feature>
+        <Banner />
       </div>
       <div>
-        <AppUserStat></AppUserStat>
+        <Feature />
       </div>
       <div>
-        <TopDeliveryMan></TopDeliveryMan>
+        <AppUserStat />
+      </div>
+      <div>
+        <TopDeliveryMan />
       </div>
     </div>
   );

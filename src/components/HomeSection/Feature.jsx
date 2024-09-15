@@ -1,17 +1,44 @@
+const features = [
+  {
+    icon: "🚚",
+    title: "Parcel Safety",
+    description:
+      "Your parcels are secure with us, thanks to our advanced tracking system.",
+  },
+  {
+    icon: "⚡",
+    title: "Super Fast Delivery",
+    description:
+      "Get your parcels delivered swiftly with our efficient delivery system.",
+  },
+  {
+    icon: "💬",
+    title: "24/7 Customer Support",
+    description:
+      "Our support team is available around the clock to assist you.",
+  },
+];
+
 const Feature = () => {
   return (
-    <div className="bg-backL dark:bg-backD h-96">
-      <h1 className="text-4xl text-center font-open font-semibold text-headL dark:text-headD ">
-        Our Features
-      </h1>
-      <p className="text-sm text-center text-paraL dark:text-paraD font-mont font-light">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae
-        perspiciatis sapiente ad optio quia iusto minus! Sint, non? Obcaecati et
-        expedita ea dolor vero soluta, ratione, omnis inventore possimus ullam
-        sapiente molestiae sint sequi libero veritatis optio praesentium, amet
-        quos. Esse animi quos, dignissimos quisquam aliquid illum tenetur neque
-        excepturi.
-      </p>
+    <div>
+      <section className="p-6 bg-white text-center">
+        <h1 className="text-4xl text-center text-headL dark:text-headD font-sans font-semibold mb-6">
+          Our Features
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {features.map((feature, index) => (
+            <div
+              key={index}
+              className="feature-card p-6 bg-gray-100 rounded-lg shadow-lg"
+            >
+              <div className="text-4xl mb-4">{feature.icon}</div>
+              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+              <p>{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 };
