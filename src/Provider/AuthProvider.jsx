@@ -53,7 +53,7 @@ const AuthProvider = ({ children }) => {
   const logOut = async () => {
     setLoading(true);
     try {
-      await axios.get("/logout", { withCredentials: true });
+      localStorage.removeItem("token");
       await signOut(auth);
     } catch (error) {
       console.error("Error during logout:", error);
@@ -68,6 +68,7 @@ const AuthProvider = ({ children }) => {
         { email },
         { withCredentials: true }
       );
+      localStorage.setItem("token", data.token);
       return data;
     } catch (error) {
       console.error("Error getting token:", error);
@@ -83,7 +84,6 @@ const AuthProvider = ({ children }) => {
       role: "user",
       requested: "user",
     };
-
     try {
       if (email) {
         try {
@@ -92,9 +92,8 @@ const AuthProvider = ({ children }) => {
             return exist;
           }
         } catch (error) {
-          if (error.response?.status === 404) {
+          if (error.response?.status === 401) {
             const { data: newUser } = await axios.put("/users", loggedUser);
-            console.log("New user added:", newUser);
             return newUser;
           } else {
             throw error;

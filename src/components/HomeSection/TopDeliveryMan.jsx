@@ -1,14 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "@/Hooks/useAxiosSecure";
 import { FaStar } from "react-icons/fa";
+import Spinner from "../shared/Spinner";
+import back from "../../assets/back.jpeg";
 
 const TopDeliveryMan = () => {
   const axiosSecure = useAxiosSecure();
-  const {
-    data: topMan = [],
-    isLoading,
-    error,
-  } = useQuery({
+  const { data: topMan = [], isLoading } = useQuery({
     queryKey: ["delivery-men"],
     queryFn: async () => {
       const { data } = await axiosSecure.get(`/delivery-men`);
@@ -16,13 +14,7 @@ const TopDeliveryMan = () => {
     },
   });
 
-  if (isLoading) return <p className="text-center text-gray-500">Loading...</p>;
-  if (error)
-    return (
-      <p className="text-center text-red-500">
-        Error loading data: {error.message}
-      </p>
-    );
+  if (isLoading) return <Spinner />;
 
   const sortedDeliveryMen = (Array.isArray(topMan) ? topMan : [])
     .slice()
@@ -35,46 +27,50 @@ const TopDeliveryMan = () => {
     .slice(0, 3);
 
   return (
-    <section className="p-6 bg-gradient-to-r from-purple-300 via-pink-300 to-red-300 dark:from-purple-700 dark:via-pink-700 dark:to-red-700">
-      <h1 className="text-4xl font-semibold text-center text-gray-900 dark:text-gray-100 mb-10">
-        Top Delivery Men
-      </h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {sortedDeliveryMen.length > 0 ? (
-          sortedDeliveryMen.map((man) => (
-            <div
-              key={man._id}
-              className="relative bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-2xl"
-            >
-              <div className="absolute inset-0 -z-10 bg-gradient-to-br from-indigo-500 to-blue-500 opacity-20 rounded-lg"></div>
-              <div className="flex items-center space-x-4 mb-4">
+    <section
+      className="bg-fixed bg-cover bg-center space-y-10 px-6 py-10 "
+      style={{
+        backgroundImage: `linear-gradient(to left, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url(${back})`,
+      }}
+    >
+      <div className="w-[80%] mx-auto">
+        <h1 className="text-4xl font-semibold text-center text-headD mb-10">
+          Top Delivery Experts
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-32">
+          {sortedDeliveryMen.length > 0 ? (
+            sortedDeliveryMen.map((man) => (
+              <div
+                key={man._id}
+                className="group relative overflow-hidden shadow-lg shadow-butD w-full cursor-pointer"
+              >
                 <img
                   src={man.image}
                   alt={man.name}
-                  className="w-20 h-20 object-cover rounded-full border-4 border-white dark:border-gray-700 shadow-lg"
+                  className="h-[300px] w-full object-cover"
                 />
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                <div className="absolute -bottom-10 opacity-0 group-hover:bottom-0 group-hover:opacity-100 transition-all duration-1000 text-center bg-backL text-headL font-open w-full h-[140px] p-5">
+                  <h2 className="text-lg font-semibold text-headL">
                     {man.name}
                   </h2>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-headL text-sm font-thin ">
                     Total Deliveries: {man.deliveryCount}
                   </p>
+                  <div className="flex justify-center items-center gap-2 mt-2">
+                    <FaStar className="text-yellow-500" />
+                    <span className="text-2xl font-bold text-headL">
+                      {man.averageRating.toFixed()}
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <FaStar className="text-yellow-500" />
-                <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                  {man.averageRating.toFixed(1)}
-                </span>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p className="text-center text-gray-600 dark:text-gray-400">
-            No delivery men data available.
-          </p>
-        )}
+            ))
+          ) : (
+            <p className="text-center text-headL">
+              No delivery men data available.
+            </p>
+          )}
+        </div>
       </div>
     </section>
   );

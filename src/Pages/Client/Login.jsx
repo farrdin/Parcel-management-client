@@ -28,7 +28,10 @@ const LogIn = () => {
         title: "Congratulations!",
         text: "Signed In  Successfully!",
         icon: "success",
+        iconColor: "#2ecc71",
         timer: 2000,
+        timerProgressBar: true,
+        confirmButtonColor: "#2ecc71",
       });
       setTimeout(() => {
         navigate(location?.state ? location.state : "/");

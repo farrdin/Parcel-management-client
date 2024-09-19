@@ -14,7 +14,7 @@ import MyDeliveryList from "@/Pages/Dashboard/DeliveryMan/MyDeliveryList";
 import MyReviews from "@/Pages/Dashboard/DeliveryMan/MyReviews";
 import BookParcel from "@/Pages/Dashboard/Users/BookParcel";
 import MyParcel from "@/Pages/Dashboard/Users/MyParcel";
-import MyProfile from "@/Pages/Dashboard/MyProfile";
+import MyProfile from "@/Pages/Dashboard/Users/MyProfile";
 import Login from "@/Pages/Client/Login";
 import Register from "@/Pages/Client/Register";
 import useRole from "@/Hooks/useRole";
@@ -31,7 +31,7 @@ const DashboardHome = () => {
   } else if (role === "deliveryMan") {
     return <Navigate to="/dashboard/deliveryList" />;
   } else if (role === "user") {
-    return <Navigate to="/dashboard/my-parcel" />;
+    return <Navigate to="/dashboard/book-parcel" />;
   }
 };
 
@@ -158,7 +158,9 @@ const router = createBrowserRouter([
         path: "profile",
         element: (
           <PrivateRoute>
-            <MyProfile />
+            <UserRoute>
+              <MyProfile />
+            </UserRoute>
           </PrivateRoute>
         ),
       },

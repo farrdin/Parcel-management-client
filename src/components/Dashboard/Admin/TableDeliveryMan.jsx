@@ -43,7 +43,7 @@ export function TableDeliveryMan() {
             <TableRow key={deliveryMan._id}>
               <TableCell>{deliveryMan.name}</TableCell>
               <TableCell>{deliveryMan.phone}</TableCell>
-              <TableCell>{deliveryMan.deliveryCount}</TableCell>
+              <TableCell>{deliveryMan.deliveryCount || "0"}</TableCell>
               <TableCell>{deliveryMan.averageRating}</TableCell>
             </TableRow>
           ))}

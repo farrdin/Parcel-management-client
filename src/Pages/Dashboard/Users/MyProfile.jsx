@@ -1,13 +1,23 @@
+import UpdateProfile from "@/components/Dashboard/User/Modal/UpdateProfile";
 import Spinner from "@/components/shared/Spinner";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import useAuth from "@/Hooks/useAuth";
 import useRole from "@/Hooks/useRole";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 
 const Profile = () => {
   const { user, loading } = useAuth() || {};
   const [role, isLoading] = useRole();
+  const [updateProfileOpen, setupdateProfileOpen] = useState(false);
+  const openUpdateProfile = () => setupdateProfileOpen(true);
+  const closeUpdateProfile = () => setupdateProfileOpen(false);
 
-  console.log(user);
   if (isLoading || loading) return <Spinner />;
   return (
     <div className="flex justify-center items-center h-screen">
@@ -49,17 +59,33 @@ const Profile = () => {
               </p>
 
               <div>
-                <button className="bg-[#F43F5E] px-10 py-1 rounded-lg text-white cursor-pointer hover:bg-[#af4053] block mb-1">
+                <button
+                  onClick={() => openUpdateProfile()}
+                  className="bg-butL hover:bg-butD  text-headL px-10 py-3 rounded-lg  cursor-pointer  block"
+                >
                   Update Profile
-                </button>
-                <button className="bg-[#F43F5E] px-7 py-1 rounded-lg text-white cursor-pointer hover:bg-[#af4053]">
-                  Change Password
                 </button>
               </div>
             </div>
           </div>
         </div>
       </div>
+      {/* Dialogue For UpdatePofile */}
+      <Dialog open={updateProfileOpen} onOpenChange={setupdateProfileOpen}>
+        <DialogTrigger asChild></DialogTrigger>
+        <DialogContent
+          style={{
+            width: "100vw",
+            maxWidth: "500px",
+            maxHeight: "480px",
+            height: "100vh",
+            overflowY: "auto",
+          }}
+        >
+          <DialogTitle>Update Your Profile</DialogTitle>
+          <UpdateProfile closeUpdateProfile={closeUpdateProfile} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

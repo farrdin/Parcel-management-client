@@ -3,6 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import CountUp from "react-countup";
 import { useState } from "react";
 import ScrollTrigger from "react-scroll-trigger";
+import Lottie from "lottie-react";
+import parcelsBookedAnimation from "../../assets/booked.json";
+import parcelsDeliveredAnimation from "../../assets/delivered.json";
+import usersOnSiteAnimation from "../../assets/user.json";
 
 const AppUserStat = () => {
   const axiosSecure = useAxiosSecure();
@@ -31,19 +35,27 @@ const AppUserStat = () => {
 
   return (
     <section className="text-center py-20 bg-gradient-to-r from-butL via-pink-500 to-butD">
-      <h1 className="text-4xl font-sans font-semibold mb-12 text-white">
-        User Insights & Stats
+      <h1 className="text-4xl font-sans font-semibold mb-3 text-headL dark:text-headD">
+        Performance Snapshot
       </h1>
+      <p className="mb-12 text-base font-mont font-light text-headL dark:text-headD">
+        See the Numbers Behind the Success
+      </p>
       <ScrollTrigger
         onEnter={() => setCounterActive(true)}
         onExit={() => setCounterActive(false)}
       >
-        <div className="flex flex-col md:flex-row justify-center items-center space-y-6 md:space-y-0 md:space-x-8">
-          <div className="stat-item bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
-            <h3 className="text-xl font-semibold text-gray-800">
-              Parcels Booked
-            </h3>
-            <p className="text-2xl font-bold text-gray-900">
+        <div className="flex flex-col md:flex-row justify-around md:w-[70%] md:mx-auto items-center space-y-6 md:space-y-0 md:space-x-8">
+          <div className="stat-item bg-backL dark:bg-backD p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
+            <div className="mb-4 flex justify-center">
+              <Lottie
+                animationData={parcelsBookedAnimation}
+                className="w-[80px] "
+                loop={true}
+              />
+            </div>
+
+            <p className="text-2xl font-bold text-headL dark:text-headD">
               {counterActive && numberParcels && (
                 <CountUp
                   end={numberParcels.totalBookedParcels}
@@ -52,12 +64,20 @@ const AppUserStat = () => {
                 />
               )}
             </p>
-          </div>
-          <div className="stat-item bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
-            <h3 className="text-xl font-semibold text-gray-800">
-              Parcels Delivered
+            <h3 className="text-xl font-semibold text-headL dark:text-headD">
+              Parcels Booked
             </h3>
-            <p className="text-2xl font-bold text-gray-900">
+          </div>
+          <div className="stat-item bg-backL dark:bg-backD p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
+            <div className="mb-4 flex justify-center">
+              <Lottie
+                animationData={parcelsDeliveredAnimation}
+                className="w-[80px] "
+                loop={true}
+              />
+            </div>
+
+            <p className="text-2xl font-bold text-headL dark:text-headD">
               {counterActive && numberDelivered && (
                 <CountUp
                   end={numberDelivered.deliveredParcels}
@@ -66,12 +86,20 @@ const AppUserStat = () => {
                 />
               )}
             </p>
-          </div>
-          <div className="stat-item bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
-            <h3 className="text-xl font-semibold text-gray-800">
-              Users On Site
+            <h3 className="text-xl font-semibold text-headL dark:text-headD">
+              Parcels Delivered
             </h3>
-            <p className="text-2xl font-bold text-gray-900">
+          </div>
+          <div className="stat-item bg-backL dark:bg-backD p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
+            <div className="mb-4 flex justify-center">
+              <Lottie
+                animationData={usersOnSiteAnimation}
+                className="w-[80px] "
+                loop={true}
+              />
+            </div>
+
+            <p className="text-2xl font-bold text-headL dark:text-headD">
               {counterActive && numberUsers && (
                 <CountUp
                   end={numberUsers.totalUsers}
@@ -80,6 +108,9 @@ const AppUserStat = () => {
                 />
               )}
             </p>
+            <h3 className="text-xl font-semibold text-headL dark:text-headD">
+              Users On Site
+            </h3>
           </div>
         </div>
       </ScrollTrigger>

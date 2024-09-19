@@ -16,6 +16,7 @@ import mapicon from "../../../assets/map.json";
 import { useMutation } from "@tanstack/react-query";
 import useAxiosSecure from "@/Hooks/useAxiosSecure";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const BookParcel = () => {
   const { user, setLoading } = useAuth();
@@ -70,7 +71,6 @@ const BookParcel = () => {
       return data;
     },
     onSuccess: () => {
-      toast.success("Parcel Booked Successfully!");
       navigate("/dashboard/my-parcel");
       setLoading(false);
     },
@@ -81,14 +81,37 @@ const BookParcel = () => {
       return;
     }
     try {
-      const parcelData = {
-        ...data,
-        latitude: String(latitude),
-        longitude: String(longitude),
-        bookingDate: today,
-        status: "Pending",
-      };
-      await mutateAsync(parcelData);
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to book this parcel?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, confirm!",
+        cancelButtonText: "No, cancel",
+        iconColor: "#FF5757",
+        confirmButtonColor: "#2ecc71",
+        cancelButtonColor: "#FF5757",
+      });
+      if (result.isConfirmed) {
+        const parcelData = {
+          ...data,
+          latitude: String(latitude),
+          longitude: String(longitude),
+          bookingDate: today,
+          status: "Pending",
+        };
+        await mutateAsync(parcelData);
+        Swal.fire({
+          title: "Success!",
+          text: "Your parcel has been booked.",
+          icon: "success",
+          timer: 3000,
+          timerProgressBar: true,
+          confirmButtonText: "OK",
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire("Cancelled", "Your booking has been cancelled.", "error");
+      }
     } catch (err) {
       console.log(err);
       toast.error(err.message);

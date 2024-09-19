@@ -1,214 +1,84 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import banner1 from "../../assets/Banner/Banner1.jpg";
-import banner2 from "../../assets/Banner/Banner2.jpg";
-import banner3 from "../../assets/Banner/Banner3.jpg";
-import banner4 from "../../assets/Banner/Banner4.jpg";
-import banner5 from "../../assets/Banner/Banner5.jpg";
+import { useState, useRef, useEffect } from "react";
+import banner from "../../assets/Banner/Banner1.jpeg";
+import animate from "../../assets/Banner/Banner.json";
 import { Fade, Slide } from "react-awesome-reveal";
+import Lottie from "lottie-react";
+import { Typewriter } from "react-simple-typewriter";
 
 const Banner = () => {
-  const scrollToSection = (id) => {
-    const section = document.getElementById(id);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
+  const [searchTerm, setSearchTerm] = useState("");
+  const lottieRef = useRef();
+  useEffect(() => {
+    if (lottieRef.current) {
+      lottieRef.current.setSpeed(0.5);
+    }
+  }, []);
+  const handleSearch = () => {
+    if (searchTerm) {
+      console.log("Searching for:", searchTerm);
     }
   };
+
   return (
-    <div>
-      <Swiper
-        spaceBetween={30}
-        centeredSlides={true}
-        autoplay={{
-          delay: 8500,
-          disableOnInteraction: true,
-        }}
-        pagination={{
-          clickable: true,
-        }}
-        navigation={true}
-        modules={[Autoplay, Pagination, Navigation]}
-        className="mySwiper"
-      >
-        <SwiperSlide>
-          <div>
-            <img className="w-full h-[400px]" src={banner1} />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, .9))",
-              }}
-            ></div>
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-white space-y-10 ">
-              <h1 className="text-center leading-10 text-3xl font-raleway font-medium w-2/3 mx-auto">
-                <>
-                  <Slide>
-                    <h1 className="text-[#F3F4F6]">Welcome to ParcelPro</h1>
-                  </Slide>
-                  <Fade
-                    className="text-[#F3F4F6]"
-                    delay={1e3}
-                    cascade
-                    damping={1e-1}
-                  >
-                    Your Trusted Solution for Effortless Parcel Management
-                  </Fade>
-                </>
-              </h1>
+    <div
+      className="relative w-full h-[400px] bg-cover bg-center"
+      style={{ backgroundImage: `url(${banner})` }}
+    >
+      <div className="absolute inset-0 bg-black/80"></div>
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between h-full px-4 space-y-6 md:space-y-0 md:w-[80%] mx-auto">
+        <div className="flex-1 flex flex-col  justify-center space-y-3 lg:space-y-5 text-headD font-open">
+          <Slide>
+            <h1 className="text-2xl lg:text-4xl font-bold leading-tight">
+              Welcome to ParcelPro
+            </h1>
+          </Slide>
+          <Fade delay={1000}>
+            <p className="text-base max-w-2xl">
+              <Typewriter
+                words={[
+                  "Your Trusted Solution for Parcel Management",
+                  "Fast, Secure, Reliable Deliveries",
+                  "Track Your Parcels in Real-Time",
+                ]}
+                loop={true}
+                cursor
+                cursorStyle="|"
+                typeSpeed={70}
+                deleteSpeed={50}
+                delaySpeed={1000}
+              />
+            </p>
+          </Fade>
+          <Fade delay={1500}>
+            <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-2">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="px-4 py-2 w-full md:w-60 lg:w-80 text-black rounded-md border border-gray-300 focus:ring-2 focus:ring-link focus:outline-none"
+                placeholder="Search parcels, services,Deliveryman"
+              />
               <button
-                className="px-8 py-3 bg-butL dark:bg-butD text-headD dark:text-headL font-raleway text-base font-semibold hover:bg-butD dark:hover:bg-butL rounded-xl"
-                onClick={() => scrollToSection("category")}
+                className="px-6 py-2 bg-[#FF5757] hover:bg-red-600 text-white font-semibold rounded-md transition-all duration-300 w-full md:w-auto"
+                onClick={handleSearch}
               >
-                View Categories
+                Search
               </button>
             </div>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div>
-            <img className="w-full h-[400px]" src={banner2} />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, .9))",
-              }}
-            ></div>
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-white space-y-10 ">
-              <h1 className="text-center leading-10 text-3xl font-raleway font-medium w-2/3 mx-auto">
-                <>
-                  <Slide>
-                    <h1 className="text-[#F3F4F6]">Welcome to CraftyHub</h1>
-                  </Slide>
-                  <Fade
-                    className="text-[#F3F4F6]"
-                    delay={1e3}
-                    cascade
-                    damping={1e-1}
-                  >
-                    Your Trusted Solution for Effortless Parcel Management
-                  </Fade>
-                </>
-              </h1>
-              <button
-                className="px-8 py-3 bg-butL dark:bg-butD text-headD dark:text-headL font-raleway text-base font-semibold hover:bg-butD dark:hover:bg-butL rounded-xl"
-                onClick={() => scrollToSection("category")}
-              >
-                View Categories
-              </button>
-            </div>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="relative">
-            <img className="w-full h-[400px]" src={banner3} alt="Banner 3" />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, .9))",
-              }}
-            ></div>
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-white space-y-10 ">
-              <h1 className="text-center leading-10 text-3xl font-raleway font-medium w-2/3 mx-auto">
-                <>
-                  <Slide>
-                    <h1 className="text-[#F3F4F6]">Welcome to CraftyHub</h1>
-                  </Slide>
-                  <Fade
-                    className="text-[#F3F4F6]"
-                    delay={1e3}
-                    cascade
-                    damping={1e-1}
-                  >
-                    Your Trusted Solution for Effortless Parcel Management
-                  </Fade>
-                </>
-              </h1>
-              <button
-                className="px-8 py-3 bg-butL dark:bg-butD text-headD dark:text-headL font-raleway text-base font-semibold hover:bg-butD dark:hover:bg-butL rounded-xl"
-                onClick={() => scrollToSection("category")}
-              >
-                View Categories
-              </button>
-            </div>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="relative">
-            <img className="w-full h-[400px]" src={banner4} alt="Banner 3" />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, .9))",
-              }}
-            ></div>
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-white space-y-10 ">
-              <h1 className="text-center leading-10 text-3xl font-raleway font-medium w-2/3 mx-auto">
-                <>
-                  <Slide>
-                    <h1 className="text-[#F3F4F6]">Welcome to ParcelPro</h1>
-                  </Slide>
-                  <Fade
-                    className="text-[#F3F4F6]"
-                    delay={1e3}
-                    cascade
-                    damping={1e-1}
-                  >
-                    Your Trusted Solution for Effortless Parcel Management
-                  </Fade>
-                </>
-              </h1>
-              <button
-                className="px-8 py-3 bg-butL dark:bg-butD text-headD dark:text-headL font-raleway text-base font-semibold hover:bg-butD dark:hover:bg-butL rounded-xl"
-                onClick={() => scrollToSection("category")}
-              >
-                Book Your Parcel
-              </button>
-            </div>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="relative">
-            <img className="w-full h-[400px]" src={banner5} alt="Banner 3" />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, .9))",
-              }}
-            ></div>
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-white space-y-10 ">
-              <h1 className="text-center leading-10 text-3xl font-raleway font-medium w-2/3 mx-auto">
-                <>
-                  <Slide>
-                    <h1 className="text-[#F3F4F6]">Welcome to CraftyHub</h1>
-                  </Slide>
-                  <Fade
-                    className="text-[#F3F4F6]"
-                    delay={1e3}
-                    cascade
-                    damping={1e-1}
-                  >
-                    Your Trusted Solution for Effortless Parcel Management
-                  </Fade>
-                </>
-              </h1>
-              <button
-                className="px-8 py-3 bg-butL dark:bg-butD text-headD dark:text-headL font-raleway text-base font-semibold hover:bg-butD dark:hover:bg-butL rounded-xl"
-                onClick={() => scrollToSection("category")}
-              >
-                View Categories
-              </button>
-            </div>
-          </div>
-        </SwiperSlide>
-      </Swiper>
+          </Fade>
+        </div>
+
+        <div className="hidden flex-1 md:flex justify-center">
+          <Slide direction="right">
+            <Lottie
+              lottieRef={lottieRef}
+              animationData={animate}
+              className="w-full lg:w-[80%]"
+              loop={true}
+            />
+          </Slide>
+        </div>
+      </div>
     </div>
   );
 };

@@ -11,14 +11,40 @@ import { IoIosNotifications } from "react-icons/io";
 import useAuth from "@/Hooks/useAuth";
 import { toast } from "react-toastify";
 import useAxiosSecure from "@/Hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 export function SelectRole({ users, refetch }) {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const [selectedRole, setSelectedRole] = useState(users.role);
   const handleChangeRole = async (value) => {
-    setSelectedRole(value);
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to change the user's role?",
+      icon: "warning",
+      iconColor: "#FF5757",
+      showCancelButton: true,
+      confirmButtonText: "Yes, change it!",
+      cancelButtonText: "No, cancel",
+      confirmButtonColor: "#2ecc71",
+      cancelButtonColor: "#FF5757",
+    });
+
+    if (!result.isConfirmed) {
+      Swal.fire({
+        title: "Cancelled",
+        text: "Role change has been cancelled.",
+        icon: "info",
+        iconColor: "#FF5757",
+        timer: 2000,
+        timerProgressBar: true,
+        confirmButtonColor: "#2ecc71",
+      });
+      return;
+    }
+
     try {
+      setSelectedRole(value);
       await axiosSecure.patch(`/users/update/${users._id}`, { role: value });
       toast.success("Role updated successfully!");
       refetch();

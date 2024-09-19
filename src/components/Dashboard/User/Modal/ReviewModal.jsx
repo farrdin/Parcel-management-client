@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-const ReviewModal = ({ closeReview, review }) => {
+const ReviewModal = ({ closeReview, review, refetch }) => {
   const axiosSecure = useAxiosSecure();
   const { user, setLoading } = useAuth();
   const [rating, setRating] = useState(0);
@@ -45,12 +45,13 @@ const ReviewModal = ({ closeReview, review }) => {
       );
       return data;
     },
-    onSuccess: () => {
-      toast.success("Reviewd Successfully!");
-    },
   });
   const today = new Date().toISOString().split("T")[0];
   const onSubmit = async (data) => {
+    if (review.review === "Reviewd") {
+      toast.error("Review already given");
+      return;
+    }
     const name = user.displayName;
     const photo = user.photoURL;
     const deliverId = assignMan._id;
@@ -80,6 +81,7 @@ const ReviewModal = ({ closeReview, review }) => {
         review: "Reviewd",
       };
       await mutateAsyncTwo(reviewd);
+      refetch();
     } catch (err) {
       console.log(err);
       toast.error(err.message);

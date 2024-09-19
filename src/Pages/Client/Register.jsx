@@ -47,7 +47,10 @@ const Register = () => {
           title: "Congratulations!",
           text: "Your Account Created Successfully!",
           icon: "success",
+          iconColor: "#2ecc71",
           timer: 2000,
+          timerProgressBar: true,
+          confirmButtonColor: "#2ecc71",
         });
 
         setTimeout(() => {
@@ -206,7 +209,7 @@ const Register = () => {
               </div>
               <button
                 type="submit"
-                className="btn bg-butL dark:bg-butD hover:bg-butD hover:dark:bg-butL text-paraD dark:text-headL hover:dark:text-paraD hover:text-headL w-full px-8 py-3 font-semibold rounded-md font-open"
+                className=" bg-butL dark:bg-butD hover:bg-butD hover:dark:bg-butL text-paraD dark:text-headL hover:dark:text-paraD hover:text-headL w-full px-8 py-3 font-semibold rounded-md font-open"
               >
                 Sign Up
               </button>

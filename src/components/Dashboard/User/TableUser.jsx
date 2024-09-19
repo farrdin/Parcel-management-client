@@ -12,7 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import {
   Table,
   TableBody,
@@ -28,6 +27,7 @@ import { toast } from "react-toastify";
 import useAxiosSecure from "@/Hooks/useAxiosSecure";
 import ReviewModal from "./Modal/ReviewModal";
 import PaymentModal from "./Modal/payment/PaymentModal";
+import Swal from "sweetalert2";
 
 export function TableUser({ parcels, isLoading, refetch }) {
   const axiosSecure = useAxiosSecure();
@@ -38,6 +38,7 @@ export function TableUser({ parcels, isLoading, refetch }) {
   const [reviewOpen, setreviewOpen] = useState(false);
   const [paymentOpen, setpaymentOpen] = useState(false);
   const [deliveryManDetails, setDeliveryManDetails] = useState({});
+  const [filterStatus, setFilterStatus] = useState("All");
 
   const openUpdate = (parcel) => {
     setSelectedParcel(parcel);
@@ -63,9 +64,40 @@ export function TableUser({ parcels, isLoading, refetch }) {
   };
   const cancelParcel = async (id) => {
     try {
-      await axiosSecure.patch(`/parcels/cancel/${id}`);
-      toast.success("Parcel cancelled successfully!");
-      refetch();
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to cancel this parcel?",
+        icon: "warning",
+        iconColor: "#FF5757",
+        showCancelButton: true,
+        confirmButtonText: "Yes, cancel it!",
+        cancelButtonText: "No, keep it",
+        confirmButtonColor: "#2ecc71",
+        cancelButtonColor: "#FF5757",
+      });
+      if (result.isConfirmed) {
+        await axiosSecure.patch(`/parcels/cancel/${id}`);
+        Swal.fire({
+          title: "Cancelled",
+          text: "Parcel has been cancelled successfully!",
+          icon: "success",
+          iconColor: "#FF5757",
+          timer: 2000,
+          timerProgressBar: true,
+          confirmButtonColor: "#2ecc71",
+        });
+        refetch();
+      } else {
+        Swal.fire({
+          title: "Cancelled",
+          text: "Parcel cancellation has been aborted.",
+          icon: "info",
+          iconColor: "#FF5757",
+          timer: 2000,
+          timerProgressBar: true,
+          confirmButtonColor: "#2ecc71",
+        });
+      }
     } catch (error) {
       console.error(error);
       toast.error("Failed to cancel parcel.");
@@ -81,26 +113,53 @@ export function TableUser({ parcels, isLoading, refetch }) {
       throw error;
     }
   };
-
   useEffect(() => {
     const fetchDetails = async () => {
       const details = {};
-      for (const parcel of parcels) {
-        if (parcel.assigned) {
-          try {
-            const userDetails = await fetchDeliveryManDetails(parcel.assigned);
-            details[parcel.assigned] = userDetails;
-          } catch (error) {
-            console.error(`Failed to fetch details for ${parcel.assigned}`);
-          }
+      const uniqueAssignedEmails = [
+        ...new Set(parcels.map((parcel) => parcel.assigned)),
+      ];
+
+      const promises = uniqueAssignedEmails.map(async (email) => {
+        if (email) {
+          const userDetails = await fetchDeliveryManDetails(email);
+          details[email] = userDetails;
         }
-      }
+      });
+
+      await Promise.all(promises);
       setDeliveryManDetails(details);
     };
     fetchDetails();
-  });
+  }, [parcels]);
+
+  const filteredParcels =
+    filterStatus === "All"
+      ? parcels
+      : parcels.filter((parcel) => parcel.status === filterStatus);
+
   return (
     <div className="overflow-x-auto">
+      <div className="mb-4">
+        <label
+          htmlFor="status-filter"
+          className="mr-2 font-semibold font-open text-headL"
+        >
+          Filter by Status:
+        </label>
+        <select
+          id="status-filter"
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+          className="px-2 py-2 border rounded-md dark:border-link dark:bg-gray-50 dark:text-headL focus:dark:border-link font-open text-headL text-xs"
+        >
+          <option value="All">All</option>
+          <option value="Pending">Pending</option>
+          <option value="On the way">On The Way</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>
@@ -114,7 +173,7 @@ export function TableUser({ parcels, isLoading, refetch }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {parcels.map((data) => (
+          {filteredParcels.map((data) => (
             <TableRow key={data._id}>
               <TableCell>{data.type}</TableCell>
               <TableCell>{data.reqDate}</TableCell>
@@ -130,42 +189,59 @@ export function TableUser({ parcels, isLoading, refetch }) {
                     <Button
                       variant="ghost"
                       className="h-8 w-8 p-0 text-link"
-                      disabled={data.status === "Cancelled"}
+                      disabled={
+                        data.status === "Cancelled" ||
+                        data.status === "On the way" ||
+                        (data.review === "Reviewd" && data.payment === "Paid")
+                      }
                     >
                       <span className="sr-only">Open menu</span>
                       <DotsHorizontalIcon className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="center">
-                    <DropdownMenuItem
-                      onClick={() => openUpdate(data)}
-                      disabled={data.status !== "Pending"}
-                    >
-                      Update
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => openPayment(data)}
-                      disabled={
-                        data.payment === "Paid" || data.status !== "Delivered"
-                      }
-                    >
-                      Pay now
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => openReview(data)}
-                      disabled={
-                        data.status !== "Delivered" || data.review === "Reviewd"
-                      }
-                    >
-                      Review
-                    </DropdownMenuItem>
+                    {data.status === "Pending" && (
+                      <DropdownMenuItem
+                        onClick={() => openUpdate(data)}
+                        disabled={data.status !== "Pending"}
+                      >
+                        Update
+                      </DropdownMenuItem>
+                    )}
+                    {!(
+                      data.payment === "Paid" || data.status !== "Delivered"
+                    ) && (
+                      <DropdownMenuItem
+                        onClick={() => openPayment(data)}
+                        disabled={
+                          data.payment === "Paid" || data.status !== "Delivered"
+                        }
+                      >
+                        Pay now
+                      </DropdownMenuItem>
+                    )}
+                    {!(
+                      data.status !== "Delivered" || data.review === "Reviewd"
+                    ) && (
+                      <DropdownMenuItem
+                        onClick={() => openReview(data)}
+                        disabled={
+                          data.status !== "Delivered" ||
+                          data.review === "Reviewd"
+                        }
+                      >
+                        Review
+                      </DropdownMenuItem>
+                    )}
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onClick={() => cancelParcel(data._id)}
-                      disabled={data.status !== "Pending"}
-                    >
-                      Cancel
-                    </DropdownMenuItem>
+                    {data.status === "Pending" && (
+                      <DropdownMenuItem
+                        onClick={() => cancelParcel(data._id)}
+                        disabled={data.status !== "Pending"}
+                      >
+                        Cancel
+                      </DropdownMenuItem>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>
@@ -173,7 +249,8 @@ export function TableUser({ parcels, isLoading, refetch }) {
           ))}
         </TableBody>
       </Table>
-      {/* //? Dialogue For Update  */}
+
+      {/* Dialogue For Update */}
       <Dialog open={updateOpen} onOpenChange={setupdateOpen}>
         <DialogTrigger asChild></DialogTrigger>
         <DialogContent
@@ -195,7 +272,7 @@ export function TableUser({ parcels, isLoading, refetch }) {
           )}
         </DialogContent>
       </Dialog>
-      {/* //?Dialogue For Review */}
+      {/* Dialogue For Review */}
       <Dialog open={reviewOpen} onOpenChange={setreviewOpen}>
         <DialogTrigger asChild></DialogTrigger>
         <DialogContent
@@ -215,19 +292,18 @@ export function TableUser({ parcels, isLoading, refetch }) {
           />
         </DialogContent>
       </Dialog>
-      {/* //?Dialogue For Payment */}
+      {/* Dialogue For Payment */}
       <Dialog open={paymentOpen} onOpenChange={setpaymentOpen}>
         <DialogTrigger asChild></DialogTrigger>
         <DialogContent
           style={{
             width: "100vw",
-            maxWidth: "450px",
+            maxWidth: "500px",
             maxHeight: "300px",
-            height: "70vh",
+            height: "100vh",
             overflowY: "auto",
           }}
         >
-          <DialogTitle>Pay Now</DialogTitle>
           <PaymentModal
             isLoading={isLoading}
             refetch={refetch}

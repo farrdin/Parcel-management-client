@@ -16,7 +16,7 @@ const Navbar = () => {
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <div className="flex items-center justify-between shadow-lg fixed top-0 z-10 w-full bg-backL dark:bg-backD font-open">
+    <div className="flex items-center justify-between shadow-lg fixed top-0 z-50 w-full bg-backL dark:bg-backD font-open">
       {/* // ?Logo & Name section */}
       <div className="flex items-center">
         <button
