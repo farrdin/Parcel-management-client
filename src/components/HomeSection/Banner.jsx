@@ -59,7 +59,7 @@ const Banner = () => {
                 placeholder="Search parcels, services,Deliveryman"
               />
               <button
-                className="px-6 py-2 bg-[#FF5757] hover:bg-red-600 text-white font-semibold rounded-md transition-all duration-300 w-full md:w-auto"
+                className="px-6 py-2 bg-butD dark:bg-butL hover:bg-butL text-headL dark:text-headD dark:hover:bg-butD font-semibold rounded-md transition-all duration-300 w-full hover:text-headD dark:hover:text-headL md:w-auto"
                 onClick={handleSearch}
               >
                 Search
