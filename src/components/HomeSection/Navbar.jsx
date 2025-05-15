@@ -5,7 +5,6 @@ import { useState } from "react";
 import logo from "../../assets/logo.png";
 import { ProfileIcon } from "./ProfileIcon";
 import { Turn as Hamburger } from "hamburger-react";
-import Notification from "./Notification";
 
 const Navbar = () => {
   const { user } = useAuth();
@@ -46,7 +45,6 @@ const Navbar = () => {
         {user ? (
           <>
             <ProfileIcon />
-            <Notification />
           </>
         ) : (
           <div className="hidden md:flex space-x-4">
