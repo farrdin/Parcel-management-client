@@ -27,11 +27,13 @@ const DashboardHome = () => {
     return <Spinner />;
   }
   if (role === "admin") {
-    return <Navigate to="/dashboard/statistics" />;
+    return <Navigate to="/dashboard/statistics" replace />;
   } else if (role === "deliveryMan") {
-    return <Navigate to="/dashboard/deliveryList" />;
+    return <Navigate to="/dashboard/deliveryList" replace />;
   } else if (role === "user") {
-    return <Navigate to="/dashboard/book-parcel" />;
+    return <Navigate to="/dashboard/book-parcel" replace />;
+  } else {
+    return <Navigate to="/" replace />;
   }
 };
 
@@ -53,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register></Register>,
+      },
+      {
+        path: "*",
+        element: <ErrorPage />,
       },
     ],
   },
@@ -163,6 +169,10 @@ const router = createBrowserRouter([
             </UserRoute>
           </PrivateRoute>
         ),
+      },
+      {
+        path: "*",
+        element: <ErrorPage />,
       },
     ],
   },
